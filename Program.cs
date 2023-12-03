@@ -1,26 +1,25 @@
 ﻿using Blog.Models;
+using Blog.Repositories;
 using Dapper.Contrib.Extensions;
 using Microsoft.Data.SqlClient;
 
 const string CONNECTION_STRING = "Server=localhost,1433;Database=Blog;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;";
-
+var connection = new SqlConnection(CONNECTION_STRING);
 //ReadUsers();
 //ReadUser();
 //CreateUser();
 //UpdateUser();
 DeleteUser();
 
-static void ReadUsers(){
-  using(var connection = new SqlConnection(CONNECTION_STRING)){
-    var users = connection.GetAll<User>();
+void ReadUsers(){
+  var repository = new UserRepository(connection);
+  var users = repository.Get();
 
-    foreach(var user in users){
-      Console.WriteLine(user.Name);
-    }
-  }
+  foreach(var user in users)
+    Console.WriteLine(user.Name);
 }
 
-static void ReadUser(){
+void ReadUser(){
   using(var connection = new SqlConnection(CONNECTION_STRING)){
     var user = connection.Get<User>(1);
 
@@ -28,7 +27,7 @@ static void ReadUser(){
   }
 }
 
-static void CreateUser(){
+void CreateUser(){
   var user = new User(){
     Bio = "Estudante dev",
     Email = "teste@algo.io",
@@ -43,7 +42,7 @@ static void CreateUser(){
   }
 }
 
-static void UpdateUser(){
+void UpdateUser(){
   var user = new User(){
     Id = 2,
     Bio = "Estudante",
@@ -59,7 +58,7 @@ static void UpdateUser(){
   }
 }
 
-static void DeleteUser(){
+void DeleteUser(){
   using(var connection = new SqlConnection(CONNECTION_STRING)){
     var user = connection.Get<User>(2);
     connection.Delete<User>(user);

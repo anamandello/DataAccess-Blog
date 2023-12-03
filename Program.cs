@@ -15,10 +15,10 @@ connection.Close();
 //DeleteUser();
 
 void ReadUsers(SqlConnection connection){
-  var repository = new UserRepository(connection);
+  var repository = new Repository<User>(connection);
   var users = repository.Get();
 
-  repository.DeleteById(1005);
+  //repository.DeleteById(1005);
 
   foreach(var user in users)
     Console.WriteLine(user.Name);
